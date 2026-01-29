@@ -1,13 +1,13 @@
 from textnode import TextType, TextNode
 from htmlnode import HTMLNode
 from leafnode import LeafNode
+from parentnode import ParentNode
 
 def main():
-    myTextNode = TextNode("Hi!", TextType.PLAIN)
-    print(myTextNode)
-    myLeafNode = LeafNode(tag="a", value="This is a link.", props={"href": "https://msn.com/", "target": "_blank"})
-    print(myLeafNode)
-    print(myLeafNode.to_html())
+    child_node = LeafNode("span", "child")
+    parent_node = ParentNode("div", [child_node])
+    print(parent_node.to_html())
+
 
 main()
 
