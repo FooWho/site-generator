@@ -15,7 +15,7 @@ class HTMLNode:
         if self.props is None:
             return html_string
         for property in self.props:
-            html_string += f" {property}=\"{self.props[property]}\""
+            html_string += f' {property}="{self.props[property]}"'
         return html_string
     
     def __repr__(self):
