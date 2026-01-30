@@ -10,17 +10,17 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(node, node2)
 
     def test_texttype_eq(self):
-        node = TextNode("This is another text node.", TextType.PLAIN, url=None)
+        node = TextNode("This is another text node.", TextType.TEXT, url=None)
         node2 = TextNode("This is another text node.", TextType.ITALIC)
         self.assertNotEqual(node, node2)
 
     def test_url_eq(self):
-        node = TextNode("I'm a text node.", TextType.PLAIN, url=None)
-        node2 = TextNode("I'm a text node.", TextType.PLAIN)
+        node = TextNode("I'm a text node.", TextType.TEXT, url=None)
+        node2 = TextNode("I'm a text node.", TextType.TEXT)
         self.assertEqual(node, node2)
 
     def test_texttype_not_eq(self):
-        node = TextNode("Me Node!", TextType.PLAIN)
+        node = TextNode("Me Node!", TextType.TEXT)
         node2 = TextNode("Me Node!", TextType.ITALIC)
         self.assertNotEqual(node, node2)
 
