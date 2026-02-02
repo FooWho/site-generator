@@ -1,4 +1,5 @@
 from textnode import TextNode, TextType
+import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -9,11 +10,18 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
         if not len(text_blocks) % 2:
             raise Exception(f"No matching delimiter for {delimiter} in {node.text}!")
         for i in range(len(text_blocks)):
-            if i % 2 == 0:
-                block = TextNode(text_blocks[i], TextType.TEXT)
-                new_nodes.append(block)
-            else:
+            if i % 2:
                 block = TextNode(text_blocks[i], text_type)
                 new_nodes.append(block)
+            else:
+                block = TextNode(text_blocks[i], TextType.TEXT)
+                new_nodes.append(block)
+                
     return new_nodes
+
+def extract_markdown_images(text):
+    #![alt text](image.jpg)
+    matches = re.findall(r"!\[rick roll\]", text)
+    #matches = re.findall(r"!\[([^\[\]]*)\]\(([^\(\)]*)\)", text)
+    return matches
             
