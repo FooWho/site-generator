@@ -1,6 +1,6 @@
 from htmlnode import HTMLNode, ParentNode, LeafNode, text_node_to_html_node
 from textnode import TextNode, TextType
-from markdownparse import split_nodes_delimiter, extract_markdown_images
+from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 
 def main():
@@ -22,6 +22,9 @@ def main():
 
     text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
     print(extract_markdown_images(text))
+
+    text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com)"
+    print(extract_markdown_links(text))
 
 main()
 

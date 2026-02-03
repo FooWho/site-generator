@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType
-from markdownparse import split_nodes_delimiter
+from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 class TestMarkdownParse(unittest.TestCase):
     def test_markdown_bold(self):
@@ -18,3 +18,7 @@ class TestMarkdownParse(unittest.TestCase):
         node = TextNode("This `is text` with a `code block` word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
         self.assertEqual(new_nodes, [TextNode("This ", TextType.TEXT), TextNode("is text", TextType.CODE), TextNode(" with a ", TextType.TEXT), TextNode("code block", TextType.CODE), TextNode(" word", TextType.TEXT)])
+
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images("This is text with an ![image](https://i.imgur.com/dhdfYTj.png)")
+        self.assertListEqual([("image", "https://i.imgur.com/dhdfYTj.png")], matches)
