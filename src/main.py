@@ -1,6 +1,6 @@
 from htmlnode import HTMLNode, ParentNode, LeafNode, text_node_to_html_node
 from textnode import TextNode, TextType
-from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_link
+from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_link, split_nodes_image, text_to_textnodes
 
 
 def main():
@@ -27,15 +27,28 @@ def main():
     #text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com)"
     #print(extract_markdown_links(text))
     
-
+    """
     node = TextNode(
         "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
         TextType.TEXT,
     )
+    #node = TextNode("[to bootdev](https://www.boot.dev)[to youtube](https://www.youtube.com/@bootdev)", TextType.TEXT)
     nodes = [node]
-    split_nodes_link(nodes)
+    new_nodes = split_nodes_link(nodes)
+    print(new_nodes)
+    """
 
-
+    node = TextNode(
+        "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
+        TextType.TEXT,
+    )
+    nodes = [node]
+    new_nodes = split_nodes_image(nodes)
+    print(new_nodes)
+    
+    #node = TextNode("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)", TextType.TEXT)
+    #nodes = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
+    #print(nodes)
 
 main()
 
