@@ -1,6 +1,6 @@
 from htmlnode import HTMLNode, ParentNode, LeafNode, text_node_to_html_node
 from textnode import TextNode, TextType
-from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_link, split_nodes_image, text_to_textnodes
+from markdownparse import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_link, split_nodes_image, text_to_textnodes, markdown_to_blocks, block_to_block_type
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
     nodes = [node]
     new_nodes = split_nodes_link(nodes)
     print(new_nodes)
-    """
+    
 
     node = TextNode(
         "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
@@ -49,6 +49,18 @@ def main():
     #node = TextNode("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)", TextType.TEXT)
     #nodes = text_to_textnodes("This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)")
     #print(nodes)
+    """
+
+    md = """
+This is a test.
+> With a quote.
+ """
+    blocks = markdown_to_blocks(md)
+    for block in blocks:
+        print(block_to_block_type(block))
+    print(blocks)
+
+
 
 main()
 

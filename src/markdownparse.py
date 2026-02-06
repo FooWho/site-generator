@@ -1,5 +1,14 @@
 from textnode import TextNode, TextType
 import re
+from enum import Enum
+
+class BlockType(Enum):
+    PARAGRAPH = "paragraph"
+    HEADING = "heading"
+    CODE = "code"
+    QUOTE = "quote"
+    UNORDERED_LIST = "unordered_list"
+    ORDERED_LIST = "ordered_list"
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -95,3 +104,32 @@ def text_to_textnodes(text):
     node_list = split_nodes_delimiter(node_list, "_", TextType.ITALIC)
     node_list = split_nodes_delimiter(node_list, "`", TextType.CODE)
     return node_list
+
+def markdown_to_blocks(markdown):
+    blocks = markdown.split("\n\n")
+    for i in range(len(blocks)):
+        blocks[i] = blocks[i].strip()
+    return blocks
+
+def block_to_block_type(block):
+    matches = re.findall(r"^#{1,6} ", block)
+    if matches:
+        return BlockType.HEADING
+    
+    matches = re.findall(r"^```\n.*```$", block, re.DOTALL)
+    if matches:
+        return BlockType.CODE
+    
+    matches = re.findall(r"^(>.*?\n)*(>.*?$)", block)
+    if matches:
+        return BlockType.QUOTE
+    
+    matches = re.findall(r"^(- .*\n)*(- .*$)", block)
+    if matches:
+        return BlockType.UNORDERED_LIST
+    
+    matches = re.findall(r"^1\. .*\n", block)
+    if matches:
+        return BlockType.ORDERED_LIST
+
+    return BlockType.PARAGRAPH
