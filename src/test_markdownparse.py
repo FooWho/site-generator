@@ -23,6 +23,10 @@ class TestMarkdownParse(unittest.TestCase):
         matches = extract_markdown_images("This is text with an ![image](https://i.imgur.com/dhdfYTj.png)")
         self.assertListEqual([("image", "https://i.imgur.com/dhdfYTj.png")], matches)
 
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links("This is text with a [link](https://www.boot.dev/)")
+        self.assertListEqual([("link", "https://www.boot.dev/")], matches)
+
     def test_split_images(self):
         node = TextNode(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png) and another ![second image](https://i.imgur.com/3elNhQu.png)",
