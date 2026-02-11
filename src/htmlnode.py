@@ -24,7 +24,7 @@ class HTMLNode:
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         if children is None:
-            raise ValueError("ParentNode has no children!")
+            self.children = []
         super(ParentNode, self).__init__(tag, None, children, props)
 
     def to_html(self):
@@ -37,6 +37,12 @@ class ParentNode(HTMLNode):
             html_string += child.to_html()
         html_string += f'</{self.tag}>'
         return html_string
+    
+    def add_child(self, child_node):
+        if self.children is None:
+            self.children = [child_node]
+        else:
+            self.children.append(child_node)
 
 
 class LeafNode(HTMLNode):

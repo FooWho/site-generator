@@ -1,4 +1,5 @@
-from textnode import TextNode, TextType
+from textnode import TextNode, TextType, text_node_to_html_node
+from htmlnode import HTMLNode, ParentNode, LeafNode
 import re
 from enum import Enum
 
@@ -142,6 +143,24 @@ def block_to_block_type(block):
     return BlockType.PARAGRAPH
 
 def markdown_to_html_node(markdown):
+    parent_doc = ParentNode("div", None)
     blocks = markdown_to_blocks(markdown)
     for block in blocks:
-        print(f"Block type is {block_to_block_type(block)}.")
+        #print(f"Block type is {block_to_block_type(block)}.")
+        #print(f"{block}")
+        match block_to_block_type(block):
+            case BlockType.PARAGRAPH:
+                p_parent = ParentNode("p", None)
+                block = parse_paragraph(block)
+                nodes = text_to_textnodes(block)
+                for node in nodes:
+                    p_parent.add_child(node)
+                    #print(f"{text_node_to_html_node(node).to_html()}", end="")
+                    #print("")
+                print(f"{p_parent.to_html()}")
+
+
+
+def parse_paragraph(block):
+    block = block.replace("\n", " ")
+    return block
