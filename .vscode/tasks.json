@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"type": "shell",
+			"command": "gcc",
+			"args": [
+				"-g",
+				"${file}",
+				"-o",
+				"${workspaceFolder}/bin/${fileBasenameNoExtension}"
+			],
+			"group": "build",
+			"presentation": {
+				"reveal": "silent"
+			},
+			"problemMatcher": "$gcc"
+		},
+		{
+			"type": "shell",
+			"label": "run-tests",
+			"command": "${workspaceFolder}/test.sh",
+			"problemMatcher": [],
+			"presentation": {
+				"reveal": "silent"
+			}
+		}
+	]
+}

@@ -107,9 +107,12 @@ def text_to_textnodes(text):
 
 def markdown_to_blocks(markdown):
     blocks = markdown.split("\n\n")
-    for i in range(len(blocks)):
-        blocks[i] = blocks[i].strip()
-    return blocks
+    processed = []
+    for block in blocks:
+        if block != "":
+            block = block.strip()
+            processed.append(block)
+    return processed
 
 def block_to_block_type(block):
     lines = block.split("\n")
@@ -154,10 +157,16 @@ def markdown_to_html_node(markdown):
                 block = parse_paragraph(block)
                 nodes = text_to_textnodes(block)
                 for node in nodes:
+                    node = text_node_to_html_node(node)
                     p_parent.add_child(node)
-                    #print(f"{text_node_to_html_node(node).to_html()}", end="")
-                    #print("")
-                print(f"{p_parent.to_html()}")
+                #print(f"{p_parent.to_html()}")
+            case BlockType.CODE:
+                nodes = text_to_textnodes(block)
+                for node in nodes:
+                    p_parent.add_child(node)
+        parent_doc.add_child(p_parent)
+    #print(f"{parent_doc.to_html()}")
+    return parent_doc
 
 
 
