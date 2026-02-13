@@ -159,13 +159,17 @@ def markdown_to_html_node(markdown):
                 for node in nodes:
                     node = text_node_to_html_node(node)
                     p_parent.add_child(node)
+                parent_doc.add_child(p_parent)
                 #print(f"{p_parent.to_html()}")
             case BlockType.CODE:
-                nodes = text_to_textnodes(block)
-                for node in nodes:
-                    p_parent.add_child(node)
-        parent_doc.add_child(p_parent)
-    #print(f"{parent_doc.to_html()}")
+                pre_parent = ParentNode("pre", None)
+                block = block.replace("```", "")
+                block = block.strip()
+                block += "\n"
+                leaf = LeafNode("code", block)
+                pre_parent.add_child(leaf)
+                parent_doc.add_child(pre_parent)
+    print(f"{parent_doc.to_html()}")
     return parent_doc
 
 
