@@ -169,7 +169,7 @@ def markdown_to_html_node(markdown):
                 leaf = LeafNode("code", block)
                 pre_parent.add_child(leaf)
                 parent_doc.add_child(pre_parent)
-    print(f"{parent_doc.to_html()}")
+    #print(f"{parent_doc.to_html()}")
     return parent_doc
 
 

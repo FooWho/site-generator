@@ -52,13 +52,12 @@ def main():
     """
 
     md = """
-```
 This is text that _should_ remain
-the **same** even with inline stuff
-```
+the **same** even with inline stuff. It has a [link to youtube.](https://www.youtube.com/)
 """
 
-    markdown_to_html_node(md)
+    parent_document = markdown_to_html_node(md)
+    print(f"{parent_document}")
 
 
 
