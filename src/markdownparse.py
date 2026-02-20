@@ -149,24 +149,17 @@ def markdown_to_html_node(markdown):
     parent_doc = ParentNode("div", None)
     blocks = markdown_to_blocks(markdown)
     for block in blocks:
-        #print(f"Block type is {block_to_block_type(block)}.")
-        #print(f"{block}")
         match block_to_block_type(block):
+            case BlockType.HEADING:
+                leaf = parse_heading(block)
+                if leaf.tag != "h1":
+                    parent_doc.add_child(leaf)
             case BlockType.PARAGRAPH:
-                p_parent = ParentNode("p", None)
-                block = parse_paragraph(block)
-                nodes = text_to_textnodes(block)
-                for node in nodes:
-                    node = text_node_to_html_node(node)
-                    p_parent.add_child(node)
+                p_parent = parse_paragraph(block)
                 parent_doc.add_child(p_parent)
-                #print(f"{p_parent.to_html()}")
             case BlockType.CODE:
                 pre_parent = ParentNode("pre", None)
-                block = block.replace("```", "")
-                block = block.strip()
-                block += "\n"
-                leaf = LeafNode("code", block)
+                leaf = parse_code(block)
                 pre_parent.add_child(leaf)
                 parent_doc.add_child(pre_parent)
     #print(f"{parent_doc.to_html()}")
@@ -174,6 +167,45 @@ def markdown_to_html_node(markdown):
 
 
 
-def parse_paragraph(block):
+def parse_paragraph(block): 
+    p_parent = ParentNode("p", None)
     block = block.replace("\n", " ")
-    return block
+    nodes = text_to_textnodes(block)
+    for node in nodes:
+        node = text_node_to_html_node(node)
+        p_parent.add_child(node)
+    return p_parent
+
+def parse_heading(block):
+    if block.startswith("# "):
+        block = block.replace("# ", "")
+        block = block.strip()
+        leaf = LeafNode("h1", block)
+    if block.startswith("## "):
+        block = block.replace("## ", "")
+        block = block.strip()
+        leaf = LeafNode("h2", block)
+    if block.startswith("### "):
+        block = block.replace("### ", "")
+        block = block.strip()
+        leaf = LeafNode("h3", block)
+    if block.startswith("#### "):
+        block = block.replace("#### ", "")
+        block = block.strip()
+        leaf = LeafNode("h4", block)
+    if block.startswith("##### "):
+        block = block.replace("##### ", "")
+        block = block.strip()
+        leaf = LeafNode("h5", block)
+    if block.startswith("###### "):
+        block = block.replace("## ", "")
+        block = block.strip()
+        leaf = LeafNode("h6", block)
+    return leaf
+
+def parse_code(block):
+    block = block.replace("```", "")
+    block = block.strip()
+    block += "\n"
+    leaf = LeafNode("code", block)
+    return leaf
