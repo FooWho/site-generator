@@ -37,11 +37,19 @@ def generate_page(from_path, template_path, dest_path):
         md = f.read()
 
     node = markdown_to_html_node(md)
-    print("*******HTML********")
-    print(f"{node.to_html()}")
-    print("*****NODE*********")
-    print(f"{node}")
+    #print("*******HTML********")
+    #print(f"{node.to_html()}")
+    #print("*****NODE*********")
+    #print(f"{node}")
+    
     with open(template_path, 'r') as f:
         template = f.read()
+
+    template = template.replace("{{ Title }}", extract_title(md))
+    template = template.replace("{{ Content }}", node.to_html())
+
+    with open(dest_path, 'w') as f:
+        f.write(template)
+
     
     

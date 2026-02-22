@@ -152,8 +152,7 @@ def markdown_to_html_node(markdown):
         match block_to_block_type(block):
             case BlockType.HEADING:
                 leaf = parse_heading(block)
-                if leaf.tag != "h1":
-                    parent_doc.add_child(leaf)
+                parent_doc.add_child(leaf)
             case BlockType.PARAGRAPH:
                 p_parent = parse_paragraph(block)
                 parent_doc.add_child(p_parent)
@@ -162,7 +161,15 @@ def markdown_to_html_node(markdown):
                 leaf = parse_code(block)
                 pre_parent.add_child(leaf)
                 parent_doc.add_child(pre_parent)
-    #print(f"{parent_doc.to_html()}")
+            case BlockType.QUOTE:
+                leaf = parse_quote(block)
+                parent_doc.add_child(leaf)
+            case BlockType.ULIST:
+                ulist_parent = parse_ulist(block)
+                parent_doc.add_child(ulist_parent)
+            case BlockType.OLIST:
+                olist_parent = parse_olist(block)
+                parent_doc.add_child(olist_parent)
     return parent_doc
 
 
@@ -209,3 +216,38 @@ def parse_code(block):
     block += "\n"
     leaf = LeafNode("code", block)
     return leaf
+
+def parse_quote(block):
+    block = block.replace(">", "")
+    block = block.replace("\n", "")
+    block = block.strip()
+    quote_block = LeafNode("blockquote", block)
+    return quote_block
+
+def parse_ulist(block):
+    ul_node = ParentNode("ul", None)
+    lines = block.split("\n")
+    for line in lines:
+        line = line.replace("- ", "")
+        line = line.strip()
+        li_node = ParentNode("li", None)
+        nodes = text_to_textnodes(line)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            li_node.add_child(node) 
+        ul_node.add_child(li_node)
+    return ul_node
+
+def parse_olist(block):
+    ol_node = ParentNode("ol", None)
+    lines = block.split("\n")
+    for line in lines:
+        line = re.sub(r"^[0-9]+\.\s", "", line)
+        line = line.strip()
+        li_node = ParentNode("li", None)
+        nodes = text_to_textnodes(line)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            li_node.add_child(node)
+        ol_node.add_child(li_node)
+    return ol_node
