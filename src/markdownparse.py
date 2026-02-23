@@ -187,28 +187,52 @@ def parse_heading(block):
     if block.startswith("# "):
         block = block.replace("# ", "")
         block = block.strip()
-        leaf = LeafNode("h1", block)
+        heading = ParentNode("h1", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
     if block.startswith("## "):
         block = block.replace("## ", "")
         block = block.strip()
-        leaf = LeafNode("h2", block)
+        heading = ParentNode("h2", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
     if block.startswith("### "):
         block = block.replace("### ", "")
         block = block.strip()
-        leaf = LeafNode("h3", block)
+        heading = ParentNode("h3", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
     if block.startswith("#### "):
         block = block.replace("#### ", "")
         block = block.strip()
-        leaf = LeafNode("h4", block)
+        heading = ParentNode("h4", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
     if block.startswith("##### "):
         block = block.replace("##### ", "")
         block = block.strip()
-        leaf = LeafNode("h5", block)
+        heading = ParentNode("h5", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
     if block.startswith("###### "):
         block = block.replace("## ", "")
         block = block.strip()
-        leaf = LeafNode("h6", block)
-    return leaf
+        heading = ParentNode("h6", None)
+        nodes = text_to_textnodes(block)
+        for node in nodes:
+            node = text_node_to_html_node(node)
+            heading.add_child(node)
+    return heading
 
 def parse_code(block):
     block = block.replace("```", "")

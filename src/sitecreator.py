@@ -48,6 +48,9 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Title }}", extract_title(md))
     template = template.replace("{{ Content }}", node.to_html())
 
+    path = os.path.dirname(dest_path)
+    if not os.path.exists(path):
+        os.makedirs(path)
     with open(dest_path, 'w') as f:
         f.write(template)
 
