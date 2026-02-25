@@ -30,6 +30,24 @@ def extract_title(markdown):
             block = block.replace("# ", "", 1)
             block = block.strip()
             return block
+        
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    print(f'Scanning directory: "{dir_path_content}"')
+    contents_of_dir = os.listdir(dir_path_content)
+    for file_object in contents_of_dir:
+        source_file_object = os.path.join(dir_path_content, file_object)
+        print(f'Source file object: "{source_file_object}"')
+        if os.path.isdir(source_file_object):
+            print(f'Entering directory "{source_file_object}"')
+            dest_file_object = os.path.join(dest_dir_path, file_object)
+            generate_pages_recursive(source_file_object, template_path, dest_file_object)
+        else:
+            file_object = file_object[::-1]
+            file_object = file_object.replace("dm.", "lmth.")
+            file_object = file_object[::-1]
+            dest_file_object = os.path.join(dest_dir_path, file_object)
+            print(f'Generating file: {dest_file_object}')
+            generate_page(source_file_object, template_path, dest_file_object)
 
 def generate_page(from_path, template_path, dest_path):
     print(f'Generating page from "{from_path}" to "{dest_path}" using "{template_path}".')
