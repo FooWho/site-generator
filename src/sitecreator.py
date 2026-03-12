@@ -31,7 +31,7 @@ def extract_title(markdown):
             block = block.strip()
             return block
         
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath="/"):
     print(f'Scanning directory: "{dir_path_content}"')
     contents_of_dir = os.listdir(dir_path_content)
     for file_object in contents_of_dir:
@@ -40,31 +40,29 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
         if os.path.isdir(source_file_object):
             print(f'Entering directory "{source_file_object}"')
             dest_file_object = os.path.join(dest_dir_path, file_object)
-            generate_pages_recursive(source_file_object, template_path, dest_file_object)
+            generate_pages_recursive(source_file_object, template_path, dest_file_object, basepath)
         else:
             file_object = file_object[::-1]
             file_object = file_object.replace("dm.", "lmth.")
             file_object = file_object[::-1]
             dest_file_object = os.path.join(dest_dir_path, file_object)
             print(f'Generating file: {dest_file_object}')
-            generate_page(source_file_object, template_path, dest_file_object)
+            generate_page(source_file_object, template_path, dest_file_object, basepath)
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath="/"):
     print(f'Generating page from "{from_path}" to "{dest_path}" using "{template_path}".')
     with open(from_path, 'r') as f:
         md = f.read()
 
     node = markdown_to_html_node(md)
-    #print("*******HTML********")
-    #print(f"{node.to_html()}")
-    #print("*****NODE*********")
-    #print(f"{node}")
     
     with open(template_path, 'r') as f:
         template = f.read()
 
     template = template.replace("{{ Title }}", extract_title(md))
     template = template.replace("{{ Content }}", node.to_html())
+    template = template.replace("href=\"/", f"href=\"{basepath}")
+    template = template.replace("src=\"/", f"src=\"{basepath}")
 
     path = os.path.dirname(dest_path)
     if not os.path.exists(path):
